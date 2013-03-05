@@ -14,10 +14,10 @@ source .bash_profile
 cd $HOME
 
 # to text
-/usr/bin/time python $HOME/pymod/R_cluster/pkl_to_txt.py pkl_fname=/fs/lustre/osu6683/gse15745_feb27_dep/all_aligned_dual/compiled_dep_matrices/gibbs.meth.all.aligned.psb.corr.feb-15-2013.pkl_gibbs.mrna.all.aligned.psb.corr.feb-15-2013.pkl.DCOR.values.pkl row_fname=gibbs.meth.all.aligned.psb.corr.feb-15-2013.tab col_fname=gibbs.mrna.all.aligned.psb.corr.feb-15-2013.tab outdir=/fs/lustre/osu6683
+/usr/bin/time python $HOME/pymod/pkl_txt_RData/pkl_to_txt.py pkl_fname=/fs/lustre/osu6683/gse15745_feb27_dep/all_aligned_dual/compiled_dep_matrices/gibbs.meth.all.aligned.psb.corr.feb-15-2013.pkl_gibbs.mrna.all.aligned.psb.corr.feb-15-2013.pkl.DCOR.values.pkl row_fname=$HOME/gibbs_feb16_cleaned_data/gibbs.meth.all.aligned.psb.corr.feb-15-2013.tab col_fname=$HOME/gibbs_feb16_cleaned_data/gibbs.mrna.all.aligned.psb.corr.feb-15-2013.tab outdir=/fs/lustre/osu6683
 
 # text to R
-/usr/bin/time Rscript txt_to_RData.R mydcor.tab outdir=/fs/lustre/osu6683/gibbs.meth.all.aligned.psb.corr.feb-15-2013.pkl_gibbs.mrna.all.aligned.psb.corr.feb-15-2013.pkl.DCOR.values.sig=0.5.abs=F.tab
+/usr/bin/time Rscript $HOME/pymod/pkl_txt_RData/txt_to_RData.R /fs/lustre/osu6683/gibbs.meth.all.aligned.psb.corr.feb-15-2013.pkl_gibbs.mrna.all.aligned.psb.corr.feb-15-2013.pkl.DCOR.values.sig=None.abs=F.tab
 
 # dual wrapper
-/usr/bin/time python $HOME/pymod/R_cluster/pkl_to_RData.py pkl_fname=/fs/lustre/osu6683/gse15745_feb27_dep/all_aligned_dual/compiled_dep_matrices/gibbs.meth.all.aligned.psb.corr.feb-15-2013.pkl_gibbs.mrna.all.aligned.psb.corr.feb-15-2013.pkl.PEARSON.values.pkl row_fname=gibbs.meth.all.aligned.psb.corr.feb-15-2013.tab col_fname=gibbs.mrna.all.aligned.psb.corr.feb-15-2013.tab outdir=/fs/lustre/osu6683
+/usr/bin/time python $HOME/pymod/pkl_txt_RData/pkl_to_RData.py pkl_fname=/fs/lustre/osu6683/gse15745_feb27_dep/all_aligned_dual/compiled_dep_matrices/gibbs.meth.all.aligned.psb.corr.feb-15-2013.pkl_gibbs.mrna.all.aligned.psb.corr.feb-15-2013.pkl.PEARSON.values.pkl row_fname=$HOME/gibbs_feb16_cleaned_data/gibbs.meth.all.aligned.psb.corr.feb-15-2013.tab col_fname=$HOME/gibbs_feb16_cleaned_data/gibbs.mrna.all.aligned.psb.corr.feb-15-2013.tab outdir=/fs/lustre/osu6683

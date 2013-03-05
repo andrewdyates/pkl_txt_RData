@@ -3,7 +3,7 @@
 
 EXAMPLE:
 
-$ python $HOME/pymod/pkl_to_txt.py pkl_fname=/fs/lustre/osu6683/gse15745_feb27_dep/all_aligned_dual/compiled_dep_matrices/gibbs.meth.all.aligned.psb.corr.feb-15-2013.pkl_gibbs.mrna.all.aligned.psb.corr.feb-15-2013.pkl.DCOR.values.pkl row_fname=gibbs.meth.all.aligned.psb.corr.feb-15-2013.tab col_fname=gibbs.mrna.all.aligned.psb.corr.feb-15-2013.tab outdir=$HOME 
+$ python $HOME/pymod/pkl_txt_RData/pkl_to_txt.py pkl_fname=/fs/lustre/osu6683/gse15745_feb27_dep/all_aligned_dual/compiled_dep_matrices/gibbs.meth.all.aligned.psb.corr.feb-15-2013.pkl_gibbs.mrna.all.aligned.psb.corr.feb-15-2013.pkl.DCOR.values.pkl row_fname=$HOME/gibbs_feb16_cleaned_data/gibbs.meth.all.aligned.psb.corr.feb-15-2013.tab col_fname=$HOME/gibbs_feb16_cleaned_data/gibbs.mrna.all.aligned.psb.corr.feb-15-2013.tab outdir=/fs/lustre/osu6683
 """
 import matrix_io as mio
 from lab_util import *
@@ -45,13 +45,14 @@ def main(pkl_fname=None, row_fname=None, col_fname=None, outdir=None, sig=None, 
   # Remove insignificant rows and columns; align row/col names
   original_dim = M.shape
   if sig is not None:
+    sig = float(sig)
     if not doabs:
       col_max = np.amax(M,0)
       row_max = np.amax(M,1)
     else:
       col_max = np.amax(np.abs(M),0)
       row_max = np.amax(np.abs(M),1)
-    M = M[row_max>=sig, col_max>=sig]
+    M = M[row_max>=sig,:][:,col_max>=sig]
     row_names = row_names[row_max>=sig]
     col_names = col_names[col_max>=sig]
   new_dim = M.shape
@@ -63,7 +64,7 @@ def main(pkl_fname=None, row_fname=None, col_fname=None, outdir=None, sig=None, 
             "sig: %s, abs: %s" % (str(sig), str(abstxt))]
   print "\n".join(header)
   fp = open(out_fname, "w")
-  mio.save(M, fp, ftype="tab", row_ids=row_names, col_ids=col_names, headers=header)
+  mio.save(M, fp, ftype="txt", delimit_c="\t", row_ids=list(row_names), col_ids=list(col_names), headers=header)
   fp.close()
   print "Tab matrix saved to %s." % out_fname
   
