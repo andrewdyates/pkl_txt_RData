@@ -11,15 +11,17 @@ import cPickle as pickle
 import sys
 import os
 import datetime
+from scipy.spatial import distance
 
 
-def main(pkl_fname=None, row_fname=None, col_fname=None, outdir=None, sig=None, doabs=False):
+def main(pkl_fname=None, row_fname=None, col_fname=None, outdir=None, sig=None, doabs=False, diag=1):
   """
   pkl_fname: path to pickled numpy dependency matrix
   row_fname: path to labeled text matrix with row ids, maybe col ids
   col_fname: optional path to labeled text matrix with col ids
   sig: float of minimum significance
   doabs: flag of whether to use absolute value for significance testing
+  diag: if matrix is symmetric, the value of the diagonal
   """
   assert pkl_fname and row_fname and outdir
   make_dir(outdir)
@@ -32,15 +34,39 @@ def main(pkl_fname=None, row_fname=None, col_fname=None, outdir=None, sig=None, 
   M = pickle.load(open(pkl_fname))
 
   # Get row and column labels.
-  D_row = mio.load(row_fname)
-  row_names = np.array(D_row['row_ids'])
+  try:
+    D_row = mio.load(row_fname)
+    row_names = np.array(D_row['row_ids'])
+  except AssertionError:
+    row_names = np.array([s.strip('\n\r') for s in open(row_fname)])
   if col_fname is None:
     col_names = np.array(D_row['col_ids'])
   else:
-    D_col = mio.load(col_fname)
-    col_names = np.array(D_col['row_ids'])
-  assert len(row_names) == np.size(M,0)
-  assert len(col_names) == np.size(M,1)
+    if row_fname == col_fname:
+      col_names = row_names
+    else:
+      try:
+        D_col = mio.load(col_fname)
+        col_names = np.array(D_col['row_ids']) # Use row IDs as column IDs in Dependency Matrix
+      except AssertionError:
+        col_names = np.array([s.strip('\n\r') for s in open(col_fname)])
+
+  if len(row_names) == np.size(M,0) and len(col_names) == np.size(M,1):
+    print "Number of rows(%d) and column(%d) names fit matrix size (%d,%d)." % \
+        (len(row_names), len(col_names), np.size(M,0), np.size(M,1))
+  else:
+    n = len(row_names)
+    if np.size(M,0) == n*(n-1)//2:
+      print "Matrix seems to be n choose 2 upper triangle matrix. Converting to full matrix..."
+      M = distance.squareform(M)
+      if diag is not None:
+        print "Forcing diagonal to be:", diag
+        for i in xrange(n):
+          M[i,i] = diag
+    else:
+      raise Exception, "Unknown matrix size %s given #row_ids(%d), #col_ids(%d)" % \
+          (np.shape(M), len(row_names), len(col_names))
+  
 
   # Remove insignificant rows and columns; align row/col names
   original_dim = M.shape
