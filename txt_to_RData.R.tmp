@@ -2,8 +2,8 @@
 ## $ Rscript txt_to_RData.R mydcor.tab
 print.eval = TRUE
 argv <- commandArgs(trailingOnly = TRUE)
-fname <- %(fin)s
-fname.out <- %(fout)s
+fname <- "%(fin)s"
+fname.out <- "%(fout)s"
 M <- read.table(fname, header=TRUE, sep="\t", row.names=1);
 save(M, file=fname.out)
 print(paste("Saved", fname.out))
