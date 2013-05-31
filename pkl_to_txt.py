@@ -29,7 +29,13 @@ def main(pkl_fname=None, row_fname=None, col_fname=None, outdir=None, sig=None, 
     abstxt = "T"
   else:
     abstxt = "F"
-  out_fname = os.path.join(outdir, os.path.basename(pkl_fname.rpartition('.')[0])+".sig=%s.abs=%s.tab"%(str(sig),str(abstxt)))
+  out_fname = os.path.join(outdir, os.path.basename(pkl_fname.rpartition('.')[0]))
+  if sig:
+    out_fname += ".sig%f" % sig
+  if doabs:
+    out_fname += ".absT"
+  out_fname += ".tab"
+
   print "Text matrix will be saved to: %s" % out_fname
   M = pickle.load(open(pkl_fname))
 
