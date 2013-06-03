@@ -3,5 +3,6 @@ argv <- commandArgs(trailingOnly = TRUE)
 fname <- "%(fin)s"
 fname.out <- "%(fout)s"
 M <- as.matrix(read.table(fname, header=TRUE, sep="\t", row.names=1, stringsAsFactors=FALSE, na.strings="", check.names=F))
+%(correct_na)s
 save(M, file=fname.out)
 print(paste("Saved", fname.out))
