@@ -5,7 +5,7 @@ USE:
 /usr/bin/time python $HOME/source_code/pkl_txt_RData/pkl_to_RData.py pkl_fname=$HOME/brca/GSE31448/GSE31448.SCAN.pkl.DCOR.values.pkl row_fname=$HOME/brca/GSE31448/normed/GSE31448.SCAN.tab col_fname=$HOME/brca/GSE31448/normed/GSE31448.SCAN.tab outdir=$HOME/brca/GSE31448/
 """
 import sys,os
-import pkl_to_txt
+import pkl_to_txt_script as pkl_to_txt
 import subprocess
 from subprocess import Popen, PIPE, STDOUT
 

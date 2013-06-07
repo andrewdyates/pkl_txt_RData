@@ -1,7 +1,8 @@
 #!/usr/bin/python
 """
-python pkl_to_RData.py pkl_fname=test.pkl row_fname=test_list.txt col_fname=test_list.txt outdir=$HOME/code/pkl_txt_RData
+python pkl_to_RData_script.py pkl_fname=test.pkl row_fname=test_list.txt col_fname=test_list.txt outdir=$HOME/code/pkl_txt_RData
 """
+# make test pickle
 import numpy as np
 import cPickle as pkl
 M = np.arange(9).reshape((3,3))
